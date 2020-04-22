@@ -14,30 +14,32 @@
       <provideFeedback>true</provideFeedback>
     </gazebo>
 
+    <!-- use hrpsys_gazebo_plugin instead of these -->
+    
     <!-- The ft_sensor plugin -->
-    <gazebo>
-      <plugin name="larm_ft_sensor" filename="libgazebo_ros_ft_sensor.so">
-        <updateRate>50.0</updateRate>
-        <topicName>/${robot_name}/state/CartesianWrench</topicName>
-        <jointName>${robot_name}_larm_joint_7</jointName>
-      </plugin>
-    </gazebo>   
+    <!-- <gazebo> -->
+    <!--   <plugin name="larm_ft_sensor" filename="libgazebo_ros_ft_sensor.so"> -->
+    <!--     <updateRate>50.0</updateRate> -->
+    <!--     <topicName>/${robot_name}/state/CartesianWrench</topicName> -->
+    <!--     <jointName>${robot_name}_larm_joint_7</jointName> -->
+    <!--   </plugin> -->
+    <!-- </gazebo>    -->
 
     <!-- The ft_sensor plugin -->
-    <gazebo>
-      <plugin name="rarm_ft_sensor" filename="libgazebo_ros_ft_sensor.so">
-        <updateRate>50.0</updateRate>
-        <topicName>/${robot_name}/state/CartesianWrench</topicName>
-        <jointName>${robot_name}_rarm_joint_7</jointName>
-      </plugin>
-    </gazebo>   
+    <!-- <gazebo> -->
+    <!--   <plugin name="rarm_ft_sensor" filename="libgazebo_ros_ft_sensor.so"> -->
+    <!--     <updateRate>50.0</updateRate> -->
+    <!--     <topicName>/${robot_name}/state/CartesianWrench</topicName> -->
+    <!--     <jointName>${robot_name}_rarm_joint_7</jointName> -->
+    <!--   </plugin> -->
+    <!-- </gazebo>    -->
 
     <!-- Load Gazebo lib and set the robot namespace -->
-    <gazebo>
-      <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
-        <robotNamespace>/${robot_name}</robotNamespace>
-      </plugin>
-    </gazebo>
+    <!-- <gazebo> -->
+    <!--   <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so"> -->
+    <!--     <robotNamespace>/${robot_name}</robotNamespace> -->
+    <!--   </plugin> -->
+    <!-- </gazebo> -->
 
     <!-- Link0 -->
     <gazebo reference="${robot_name}_larm_link_0">

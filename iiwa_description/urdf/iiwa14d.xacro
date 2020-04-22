@@ -14,13 +14,59 @@
   <xacro:property name="joint_damping" value="0.5" />
   <xacro:property name="max_effort" value="300"/>
   <xacro:property name="max_velocity" value="10"/>
+  <xacro:property name="torso_w" value="0.6"/>
+  <xacro:property name="torso_h" value="1.6"/>
+  <xacro:property name="shoulder_h" value="1.0"/>
   
   <xacro:macro name="iiwa14" params="parent hardware_interface robot_name *origin">
-    
-    <!--joint between {parent} and link_0-->
-    <joint name="${parent}_${robot_name}_larm_joint" type="fixed">
+
+    <!--joint between {parent} and torso-->
+    <joint name="${robot_name}_torso_joint" type="fixed">
       <xacro:insert_block name="origin"/>
       <parent link="${parent}"/>
+      <child link="${robot_name}_torso_link"/>
+    </joint>
+
+    <link name="${robot_name}_torso_link">
+      <inertial>
+        <origin xyz="0 0 ${torso_h/2}" rpy="0 0 0"/>
+        <mass value="500"/>
+        <inertia ixx="10.5"  ixy="0"  ixz="0" iyy="10.6" iyz="0" izz="10.3" />
+      </inertial>
+      
+      <visual>
+        <origin xyz="0 0 ${torso_h/2}" rpy="0 0 ${radians(45)}"/>
+        <geometry>
+          <box size="${torso_w} ${torso_w} ${torso_h}"/>
+        </geometry>
+        <material name="Grey"/>
+      </visual>
+      
+      <!-- <collision> -->
+      <!--   <origin xyz="0 0 0" rpy="0 0 0"/> -->
+      <!--   <geometry> -->
+      <!--     <box size="1 2 3"/> -->
+      <!-- 	</geometry> -->
+      <!--   <material name="Grey"/> -->
+      <!-- </collision> -->
+      
+      <!-- <self_collision_checking> -->
+      <!--   <origin xyz="0 0 0" rpy="0 0 0"/> -->
+      <!--   <geometry> -->
+      <!--     <capsule radius="0.15" length="0.25"/> -->
+      <!--   </geometry> -->
+      <!-- </self_collision_checking> -->
+      
+    </link>
+
+    
+
+    
+    <!--joint between torso and link_0-->
+    <joint name="${robot_name}_larm_joint_0" type="fixed">
+      <!-- <xacro:insert_block name="origin"/> -->
+      <origin xyz="${torso_w/2/sqrt(2)} ${torso_w/2/sqrt(2)} ${shoulder_h}" rpy="0 ${radians(90)} ${radians(45)}"/>
+      <parent link="${robot_name}_torso_link"/>
       <child link="${robot_name}_larm_link_0"/>
     </joint>
     
@@ -356,21 +402,22 @@
 
 
     <!--joint between {parent} and link_0-->
-    <joint name="${parent}_${robot_name}_rarm_joint" type="fixed">
-      <xacro:insert_block name="origin"/>
-      <parent link="${parent}"/>
+    <joint name="${robot_name}_rarm_joint_0" type="fixed">
+      <!-- <xacro:insert_block name="origin"/> -->
+      <origin xyz="${torso_w/2/sqrt(2)} ${-torso_w/2/sqrt(2)} ${shoulder_h}" rpy="0 ${radians(90)} ${radians(-45)}"/>
+      <parent link="${robot_name}_torso_link"/>
       <child link="${robot_name}_rarm_link_0"/>
     </joint>
     
     <link name="${robot_name}_rarm_link_0">
       <inertial>
-        <origin xyz="-0.1 -1 0.07" rpy="0 0 0"/>
+        <origin xyz="-0.1 0 0.07" rpy="0 0 0"/>
         <mass value="5"/>
         <inertia ixx="0.05"  ixy="0"  ixz="0" iyy="0.06" iyz="0" izz="0.03" />
       </inertial>
       
       <visual>
-        <origin xyz="0 -1 0" rpy="0 0 0"/>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
         <geometry>
           <mesh filename="package://iiwa_description/meshes/iiwa14/visual/link_0.stl"/>
         </geometry>
@@ -378,7 +425,7 @@
       </visual>
       
       <collision>
-        <origin xyz="0 -1 0" rpy="0 0 0"/>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
         <geometry>
           <mesh filename="package://iiwa_description/meshes/iiwa14/collision/link_0.stl"/>
         </geometry>
@@ -386,7 +433,7 @@
       </collision>
       
       <self_collision_checking>
-        <origin xyz="0 -1 0" rpy="0 0 0"/>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
         <geometry>
           <capsule radius="0.15" length="0.25"/>
         </geometry>
@@ -398,7 +445,7 @@
     <joint name="${robot_name}_rarm_joint_1" type="revolute">
       <parent link="${robot_name}_rarm_link_0"/>
       <child link="${robot_name}_rarm_link_1"/>
-      <origin xyz="0 -1 0.1575" rpy="0 0 0"/>
+      <origin xyz="0 0 0.1575" rpy="0 0 0"/>
       <axis xyz="0 0 1"/>
       <limit lower="${-170 * PI / 180}" upper="${170 * PI / 180}"
              effort="${max_effort}" velocity="${max_velocity}" />

@@ -17,5 +17,16 @@
   <xacro:iiwa14 hardware_interface="$(arg hardware_interface)" robot_name="$(arg robot_name)" parent="world">
     <origin xyz="$(arg origin_xyz)" rpy="$(arg origin_rpy)" />
   </xacro:iiwa14>
+
+
+  <!-- add IOB plugin -->
+  <gazebo>
+    <plugin filename="libIOBPlugin.so" name="hrpsys_gazebo_plugin" >
+      <robotname>iiwa14d</robotname>
+      <controller>hrpsys_gazebo_configuration</controller>
+    </plugin>
+  </gazebo>
+
+
   
 </robot>
