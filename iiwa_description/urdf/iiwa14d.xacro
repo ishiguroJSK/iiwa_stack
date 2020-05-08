@@ -17,6 +17,9 @@
   <xacro:property name="torso_w" value="0.6"/>
   <xacro:property name="torso_h" value="1.6"/>
   <xacro:property name="shoulder_h" value="1.0"/>
+  <xacro:property name="ee_l" value="0.4"/>
+  <xacro:property name="ee_w" value="0.1"/>
+  <xacro:property name="ee_t" value="0.001"/>
   
   <xacro:macro name="iiwa14" params="parent hardware_interface robot_name *origin">
 
@@ -66,6 +69,7 @@
     <joint name="${robot_name}_larm_joint_0" type="fixed">
       <!-- <xacro:insert_block name="origin"/> -->
       <origin xyz="${torso_w/2/sqrt(2)} ${torso_w/2/sqrt(2)} ${shoulder_h}" rpy="0 ${radians(90)} ${radians(45)}"/>
+      <!-- <origin xyz="${torso_w/2/sqrt(2)} ${torso_w/2/sqrt(2)} ${shoulder_h}" rpy="0 ${radians(90)} 0"/> -->
       <parent link="${robot_name}_torso_link"/>
       <child link="${robot_name}_larm_link_0"/>
     </joint>
@@ -382,6 +386,29 @@
     </joint>
     
     <link name="${robot_name}_larm_link_ee">
+
+      <inertial>
+        <origin xyz="0 0 ${ee_l/2}" rpy="0 0 0"/>
+        <mass value="0.1"/>
+        <inertia ixx="0.1"  ixy="0"  ixz="0" iyy="0.1" iyz="0" izz="0.1" />
+      </inertial>
+      
+      <visual>
+        <origin xyz="0 0 ${ee_l/2}" rpy="0 0 0"/>
+        <geometry>
+          <box size="${ee_w} ${ee_t} ${ee_l}"/>
+        </geometry>
+        <material name="Grey"/>
+      </visual>
+      
+      <collision>
+        <origin xyz="0 0 ${ee_l/2}" rpy="0 0 0"/>
+        <geometry>
+          <box size="${ee_w} ${ee_t} ${ee_l}"/>
+        </geometry>
+        <material name="Grey"/>
+      </collision>
+            
     </link>
     
 
@@ -405,6 +432,7 @@
     <joint name="${robot_name}_rarm_joint_0" type="fixed">
       <!-- <xacro:insert_block name="origin"/> -->
       <origin xyz="${torso_w/2/sqrt(2)} ${-torso_w/2/sqrt(2)} ${shoulder_h}" rpy="0 ${radians(90)} ${radians(-45)}"/>
+      <!-- <origin xyz="${torso_w/2/sqrt(2)} ${-torso_w/2/sqrt(2)} ${shoulder_h}" rpy="0 ${radians(90)} 0"/> -->
       <parent link="${robot_name}_torso_link"/>
       <child link="${robot_name}_rarm_link_0"/>
     </joint>
@@ -721,6 +749,29 @@
     </joint>
     
     <link name="${robot_name}_rarm_link_ee">
+
+      <inertial>
+        <origin xyz="0 0 ${ee_l/2}" rpy="0 0 0"/>
+        <mass value="0.1"/>
+        <inertia ixx="0.1"  ixy="0"  ixz="0" iyy="0.1" iyz="0" izz="0.1" />
+      </inertial>
+      
+      <visual>
+        <origin xyz="0 0 ${ee_l/2}" rpy="0 0 0"/>
+        <geometry>
+          <box size="${ee_w} ${ee_t} ${ee_l}"/>
+        </geometry>
+        <material name="Grey"/>
+      </visual>
+      
+      <collision>
+        <origin xyz="0 0 ${ee_l/2}" rpy="0 0 0"/>
+        <geometry>
+          <box size="${ee_w} ${ee_t} ${ee_l}"/>
+        </geometry>
+        <material name="Grey"/>
+      </collision>
+            
     </link>
     
 
