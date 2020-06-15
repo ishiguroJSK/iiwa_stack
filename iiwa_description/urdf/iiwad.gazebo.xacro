@@ -5,9 +5,9 @@
   <xacro:macro name="iiwad_gazebo" params="robot_name">
 
      <!-- Enable the Joint Feedback -->
-    <gazebo reference="${robot_name}_larm_joint_7">
-      <provideFeedback>true</provideFeedback>
-    </gazebo>
+     <gazebo reference="${robot_name}_larm_joint_7">
+       <provideFeedback>true</provideFeedback>
+     </gazebo>
 
      <!-- Enable the Joint Feedback -->
     <gazebo reference="${robot_name}_rarm_joint_7">
@@ -18,74 +18,149 @@
 
     <gazebo reference="${robot_name}_larm_link_ee">
       <material>Gazebo/Grey</material>
-      <mu1>0.2</mu1>
-      <mu2>0.2</mu2>
+      <mu1>0.5</mu1>
+      <mu2>0.5</mu2>
     </gazebo>
 
     <gazebo reference="${robot_name}_rarm_link_ee">
       <material>Gazebo/Grey</material>
-      <mu1>0.2</mu1>
-      <mu2>0.2</mu2>
+      <mu1>0.5</mu1>
+      <mu2>0.5</mu2>
     </gazebo>
 
 
-
-    <gazebo reference="${robot_name}_torso_link">
-      <sensor type="multicamera" name="stereo_camera">
-	<update_rate>30.0</update_rate>
-	<camera name="left">
-	  <pose>0.424264 0.03 1.6 0 ${radians(45)} 0</pose>
-          <horizontal_fov>1.3962634</horizontal_fov>
+    <!-- add Kinect plugin, link and joint without visual and collision -->
+    <joint name="xtion_joint" type="fixed">
+      <origin xyz="0.424264 0 1.6" rpy="0 ${radians(45)} 0"/>
+      <parent link="${robot_name}_torso_link"/>
+      <child link="xtion_link"/>
+    </joint>
+    <link name="xtion_link">
+      <inertial>
+	<mass value="0.200"/>
+	<origin rpy="0 0 0" xyz="0 0 0"/>
+	<inertia ixx="5.8083e-4" ixy="0" ixz="0" iyy="3.0833e-5" iyz="0" izz="5.9083e-4"/>
+      </inertial>
+    </link>
+    <joint name="xtion_depth_joint" type="fixed">
+      <origin rpy="0 0 0" xyz="0.0 0.049 0.0"/>
+      <parent link="xtion_link"/>
+      <child link="xtion_depth_frame"/>
+    </joint>
+    <link name="xtion_depth_frame"/>
+    <joint name="xtion_depth_optical_joint" type="fixed">
+      <origin rpy="-1.57079632679 0.0 -1.57079632679" xyz="0 0 0"/>
+      <parent link="xtion_depth_frame"/>
+      <child link="xtion_depth_optical_frame"/>
+    </joint>
+    <link name="xtion_depth_optical_frame"/>
+    <joint name="xtion_rgb_joint" type="fixed">
+      <origin rpy="0 0 0" xyz="0.0 0.022 0.0"/>
+      <parent link="xtion_link"/>
+      <child link="xtion_rgb_frame"/>
+    </joint>
+    <link name="xtion_rgb_frame"/>
+    <joint name="xtion_rgb_optical_joint" type="fixed">
+      <origin rpy="-1.57079632679 0.0 -1.57079632679" xyz="0 0 0"/>
+      <parent link="xtion_rgb_frame"/>
+      <child link="xtion_rgb_optical_frame"/>
+    </joint>
+    <link name="xtion_rgb_optical_frame"/>
+    <gazebo reference="xtion_depth_frame">
+      <sensor name="xtion" type="depth">
+	<update_rate>20</update_rate>
+	<camera>
+          <!-- <horizontal_fov>1.09606677025</horizontal_fov> -->
+          <horizontal_fov>1.570796327</horizontal_fov>
           <image>
-            <width>800</width>
-            <height>800</height>
-            <format>R8G8B8</format>
+            <!-- <format>R8G8B8</format> -->
+            <format>B8G8R8</format>
+            <!-- <width>640</width> -->
+            <!-- <height>480</height> -->
+            <width>640</width>
+            <height>480</height>
           </image>
           <clip>
-            <near>0.02</near>
-            <far>300</far>
+            <near>0.5</near>
+            <far>9</far>
           </clip>
-          <noise>
-            <type>gaussian</type>
-            <mean>0.0</mean>
-            <stddev>0.007</stddev>
-          </noise>
 	</camera>
-	<camera name="right">
-          <pose>0 -0.03 1.6 0 ${radians(45)} 0</pose>
-          <horizontal_fov>1.3962634</horizontal_fov>
-          <image>
-            <width>800</width>
-            <height>800</height>
-            <format>R8G8B8</format>
-          </image>
-          <clip>
-            <near>0.02</near>
-            <far>300</far>
-          </clip>
-          <noise>
-            <type>gaussian</type>
-            <mean>0.0</mean>
-            <stddev>0.007</stddev>
-          </noise>
-	</camera>
-	<plugin name="stereo_camera_controller" filename="libgazebo_ros_multicamera.so">
+	<plugin filename="libgazebo_ros_openni_kinect.so" name="xtion_camera_controller">
           <alwaysOn>true</alwaysOn>
-          <updateRate>0.0</updateRate>
-          <cameraName>${robot_name}/camera</cameraName>
-          <imageTopicName>image_raw</imageTopicName>
-          <cameraInfoTopicName>camera_info</cameraInfoTopicName>
-          <frameName>left_camera_optical_frame</frameName>
-          <!--<rightFrameName>right_camera_optical_frame</rightFrameName>-->
-          <hackBaseline>0.07</hackBaseline>
-          <distortionK1>0.0</distortionK1>
-          <distortionK2>0.0</distortionK2>
-          <distortionK3>0.0</distortionK3>
-          <distortionT1>0.0</distortionT1>
-          <distortionT2>0.0</distortionT2>
+          <updateRate>20</updateRate>
+          <imageTopicName>xtion/rgb/image_raw</imageTopicName>
+          <cameraInfoTopicName>xtion/rgb/camera_info</cameraInfoTopicName>
+          <depthImageTopicName>xtion/depth/image_raw</depthImageTopicName>
+          <depthImageCameraInfoTopicName>xtion/depth/camera_info</depthImageCameraInfoTopicName>
+          <pointCloudTopicName>xtion/depth/points</pointCloudTopicName>
+          <frameName>xtion_depth_optical_frame</frameName>
+          <distortion_k1>0.0</distortion_k1>
+          <distortion_k2>0.0</distortion_k2>
+          <distortion_k3>0.0</distortion_k3>
+          <distortion_t1>0.0</distortion_t1>
+          <distortion_t2>0.0</distortion_t2>
 	</plugin>
       </sensor>
     </gazebo>
+    
+
+
+    <!-- <gazebo reference="${robot_name}_torso_link"> -->
+    <!--   <sensor type="multicamera" name="stereo_camera"> -->
+    <!-- 	<update_rate>30.0</update_rate> -->
+    <!-- 	<camera name="left"> -->
+    <!-- 	  <pose>0.424264 0.03 1.6 0 ${radians(45)} 0</pose> -->
+    <!--       <horizontal_fov>1.3962634</horizontal_fov> -->
+    <!--       <image> -->
+    <!--         <width>800</width> -->
+    <!--         <height>800</height> -->
+    <!--         <format>R8G8B8</format> -->
+    <!--       </image> -->
+    <!--       <clip> -->
+    <!--         <near>0.02</near> -->
+    <!--         <far>300</far> -->
+    <!--       </clip> -->
+    <!--       <noise> -->
+    <!--         <type>gaussian</type> -->
+    <!--         <mean>0.0</mean> -->
+    <!--         <stddev>0.007</stddev> -->
+    <!--       </noise> -->
+    <!-- 	</camera> -->
+    <!-- 	<camera name="right"> -->
+    <!--       <pose>0 -0.03 1.6 0 ${radians(45)} 0</pose> -->
+    <!--       <horizontal_fov>1.3962634</horizontal_fov> -->
+    <!--       <image> -->
+    <!--         <width>800</width> -->
+    <!--         <height>800</height> -->
+    <!--         <format>R8G8B8</format> -->
+    <!--       </image> -->
+    <!--       <clip> -->
+    <!--         <near>0.02</near> -->
+    <!--         <far>300</far> -->
+    <!--       </clip> -->
+    <!--       <noise> -->
+    <!--         <type>gaussian</type> -->
+    <!--         <mean>0.0</mean> -->
+    <!--         <stddev>0.007</stddev> -->
+    <!--       </noise> -->
+    <!-- 	</camera> -->
+    <!-- 	<plugin name="stereo_camera_controller" filename="libgazebo_ros_multicamera.so"> -->
+    <!--       <alwaysOn>true</alwaysOn> -->
+    <!--       <updateRate>0.0</updateRate> -->
+    <!--       <cameraName>${robot_name}/camera</cameraName> -->
+    <!--       <imageTopicName>image_raw</imageTopicName> -->
+    <!--       <cameraInfoTopicName>camera_info</cameraInfoTopicName> -->
+    <!--       <frameName>left_camera_optical_frame</frameName> -->
+    <!--       <!-\-<rightFrameName>right_camera_optical_frame</rightFrameName>-\-> -->
+    <!--       <hackBaseline>0.07</hackBaseline> -->
+    <!--       <distortionK1>0.0</distortionK1> -->
+    <!--       <distortionK2>0.0</distortionK2> -->
+    <!--       <distortionK3>0.0</distortionK3> -->
+    <!--       <distortionT1>0.0</distortionT1> -->
+    <!--       <distortionT2>0.0</distortionT2> -->
+    <!-- 	</plugin> -->
+    <!--   </sensor> -->
+    <!-- </gazebo> -->
 
 
 

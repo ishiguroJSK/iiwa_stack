@@ -17,9 +17,12 @@
   <xacro:property name="torso_w" value="0.6"/>
   <xacro:property name="torso_h" value="1.6"/>
   <xacro:property name="shoulder_h" value="1.0"/>
-  <xacro:property name="ee_l" value="0.4"/>
+  <xacro:property name="ee_l" value="0.3"/>
   <xacro:property name="ee_w" value="0.1"/>
-  <xacro:property name="ee_t" value="0.001"/>
+  <xacro:property name="ee_t" value="0.002"/>
+  <!-- <xacro:property name="ee_l" value="0.3"/> -->
+  <!-- <xacro:property name="ee_w" value="0.02"/> -->
+  <!-- <xacro:property name="ee_t" value="0.02"/> -->
   
   <xacro:macro name="iiwa14" params="parent hardware_interface robot_name *origin">
 
