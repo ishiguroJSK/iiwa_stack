@@ -68,7 +68,7 @@
     <link name="xtion_rgb_optical_frame"/>
     <gazebo reference="xtion_depth_frame">
       <sensor name="xtion" type="depth">
-	<update_rate>20</update_rate>
+	<update_rate>60</update_rate>
 	<camera>
           <!-- <horizontal_fov>1.09606677025</horizontal_fov> -->
           <horizontal_fov>1.570796327</horizontal_fov>
@@ -87,7 +87,7 @@
 	</camera>
 	<plugin filename="libgazebo_ros_openni_kinect.so" name="xtion_camera_controller">
           <alwaysOn>true</alwaysOn>
-          <updateRate>20</updateRate>
+          <updateRate>60</updateRate>
           <imageTopicName>xtion/rgb/image_raw</imageTopicName>
           <cameraInfoTopicName>xtion/rgb/camera_info</cameraInfoTopicName>
           <depthImageTopicName>xtion/depth/image_raw</depthImageTopicName>
